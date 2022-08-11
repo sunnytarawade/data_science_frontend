@@ -1,39 +1,17 @@
-import './App.css';
-import React, {useState} from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import CleanData from './components/CleanData';
+import FileUpload from './components/FileUpload';
+import { dataCleaningStatus } from './utils/constants';
 
 function App() {
 
-  const [file, setFile] = useState()
-
-  function handleChange(event) {
-    setFile(event.target.files[0])
-  }
-  
-  function handleSubmit(event) {
-    event.preventDefault()
-    const url = 'http://localhost:5000/upload';
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('fileName', file.name);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-      },
-    };
-    axios.post(url, formData, config).then((response) => {
-      console.log(response.data);
-    });
-
-  }
+  const [uploadedFileDetails,setUploadedFileDetails] = useState(null);
+  const [dataCleaningDetails,setDataCleaningDetails] = useState({STATUS: dataCleaningStatus.NOT_STARTED});
 
   return (
     <div className="App">
-        <form onSubmit={handleSubmit}>
-          <h1>React File Upload</h1>
-          <input type="file" onChange={handleChange}/>
-          <button type="submit">Upload</button>
-        </form>
+        <FileUpload setUploadedFileDetails={setUploadedFileDetails}/>
+        <CleanData uploadedFileDetails={uploadedFileDetails} setDataCleaningDetails={setDataCleaningDetails} dataCleaningDetails={dataCleaningDetails}/>
     </div>
   );
 }
