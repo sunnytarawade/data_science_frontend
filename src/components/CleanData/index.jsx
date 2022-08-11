@@ -1,19 +1,23 @@
 import React from 'react';
 import axios from 'axios';
-import {dataCleaningStatus} from '../utils/constants';
+import {dataCleaningStatus} from '../../utils/constants';
 
-function CleanData({uploadedFileDetails,dataCleaningDetails,setDataCleaningDetails}) {
+function CleanData({uploadedDetails,dataCleaningDetails,setDataCleaningDetails}) {
 
 
 
     const handleStartDataCleaning = ()=>{
-        if(uploadedFileDetails.upload_id){
-            setTimeout(()=>{setDataCleaningDetails({STATUS: dataCleaningStatus.SUCCESS})},5000)
+        if(uploadedDetails.upload_id){
+            const url = `http://localhost:5000/clean_data/${uploadedDetails.upload_id}`;
+            axios.get(url).then(response => {
+                console.log(response)
+                setDataCleaningDetails({status: dataCleaningStatus.SUCCESS});
+            })
         }
     }
 
     const handleDownloadCleanedData = ()=>{
-        const url = `http://localhost:5000/download/${uploadedFileDetails.upload_id}`;
+        const url = `http://localhost:5000/download/${uploadedDetails.upload_id}`;
         
         axios.get(url, {
                 responseType: 'arraybuffer'
@@ -25,17 +29,17 @@ function CleanData({uploadedFileDetails,dataCleaningDetails,setDataCleaningDetai
                 );
                 const link = document.createElement('a');
                 link.href = window.URL.createObjectURL(blob);
-                link.download = `${uploadedFileDetails.upload_id}_cleaned.csv`;
+                link.download = `${uploadedDetails.upload_id}.zip`;
                 link.click();
             })
 
     }
 
-    return uploadedFileDetails ?  (
+    return uploadedDetails ?  (
         <div>
             <button onClick={handleStartDataCleaning}>Clean Data</button>
             {
-                dataCleaningDetails?.STATUS === dataCleaningStatus.SUCCESS && (
+                dataCleaningDetails?.status === dataCleaningStatus.SUCCESS && (
                     <button onClick={handleDownloadCleanedData}>Download Cleaned Data</button>
                 )
             }

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import CleanData from './components/CleanData';
-import FileUpload from './components/FileUpload';
+import CleanData from './components/CleanData/index';
+import FileUpload from './components/FileUpload/index';
 import { dataCleaningStatus } from './utils/constants';
+import './App.css';
 
 function App() {
 
-  const [uploadedFileDetails,setUploadedFileDetails] = useState(null);
-  const [dataCleaningDetails,setDataCleaningDetails] = useState({STATUS: dataCleaningStatus.NOT_STARTED});
+  const [uploadedDetails,setUploadedDetails] = useState(null);
+  const [dataCleaningDetails,setDataCleaningDetails] = useState({status: dataCleaningStatus.NOT_STARTED});
 
   return (
     <div className="App">
-        <FileUpload setUploadedFileDetails={setUploadedFileDetails}/>
-        <CleanData uploadedFileDetails={uploadedFileDetails} setDataCleaningDetails={setDataCleaningDetails} dataCleaningDetails={dataCleaningDetails}/>
+        <FileUpload setUploadedDetails={setUploadedDetails}/>
+        <CleanData uploadedDetails={uploadedDetails} setDataCleaningDetails={setDataCleaningDetails} dataCleaningDetails={dataCleaningDetails}/>
     </div>
   );
 }
