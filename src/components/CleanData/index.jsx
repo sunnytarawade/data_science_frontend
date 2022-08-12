@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import {dataCleaningStatus} from '../../utils/constants';
+import {dataCleaningStatus,baseUrl,urls} from '../../utils/constants';
+
+const {CLEAN_DATA,DOWNLOAD_CLEANED_DATA} = urls;
 
 function CleanData({uploadedDetails,dataCleaningDetails,setDataCleaningDetails}) {
 
@@ -8,7 +10,7 @@ function CleanData({uploadedDetails,dataCleaningDetails,setDataCleaningDetails})
 
     const handleStartDataCleaning = ()=>{
         if(uploadedDetails.upload_id){
-            const url = `http://localhost:5000/clean_data/${uploadedDetails.upload_id}`;
+            const url = `${baseUrl}${CLEAN_DATA}${uploadedDetails.upload_id}`;
             axios.get(url).then(response => {
                 console.log(response)
                 setDataCleaningDetails({status: dataCleaningStatus.SUCCESS});
@@ -17,7 +19,7 @@ function CleanData({uploadedDetails,dataCleaningDetails,setDataCleaningDetails})
     }
 
     const handleDownloadCleanedData = ()=>{
-        const url = `http://localhost:5000/download/${uploadedDetails.upload_id}`;
+        const url = `${baseUrl}${DOWNLOAD_CLEANED_DATA}${uploadedDetails.upload_id}`;
         
         axios.get(url, {
                 responseType: 'arraybuffer'

@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import './index.css';
+import { baseUrl, urls } from '../../utils/constants';
+
+const { FILE_UPLOAD } = urls;
 
 function FileUpload({setUploadedDetails}) {
 
@@ -16,7 +19,7 @@ function FileUpload({setUploadedDetails}) {
   
   function handleSubmit(event) {
     event.preventDefault()
-    const url = 'http://localhost:5000/upload';
+    const url = `${baseUrl}${FILE_UPLOAD}`;
 
     const formData = new FormData();
     formData.append('ridesDataFile', ridesDataFile);
