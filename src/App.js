@@ -8,6 +8,7 @@ import Chart from './components/Visualizations/ResponsiveBar';
 import Curve from './components/Visualizations/Curve';
 import BarChart from './components/Visualizations/Bar';
 import DurationDistributionData from './components/Visualizations/DurationDistribution';
+import StationsMap from './components/Visualizations/StationsMap';
 
 function App() {
 
@@ -21,8 +22,9 @@ function App() {
         {
           // dataCleaningDetails?.status === dataCleaningStatus.SUCCESS && 
           <>
-            <DurationDistributionData/>
-            <BarChart uploadedDetails={uploadedDetails}/>
+            <StationsMap/>
+            {/* <DurationDistributionData/>
+            <BarChart uploadedDetails={uploadedDetails}/> */}
           </>
         }
        

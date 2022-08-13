@@ -1,0 +1,7 @@
+.mapboxgl-map{
+    height: 50vh !important;
+}
+
+.marker-popup-heading{
+    font-size: 1.2vw;
+}
