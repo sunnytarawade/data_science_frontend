@@ -219,7 +219,7 @@ function BarChart({ uploadedDetails }) {
       
     svg
       .selectAll('.x-axis .tick')
-      .style("transform",(value,index)=>`rotate(270deg)translateX(-100px)translateY(${(2*index+1)*xScale.bandwidth()}px)`)
+      .style("transform",(value,index)=>`rotate(270deg)translateX(-100px)translateY(${xScale(index)}px)`)
     
     svg
       .selectAll('.x-axis line')

@@ -7,6 +7,7 @@ import './App.css';
 import Chart from './components/Visualizations/ResponsiveBar';
 import Curve from './components/Visualizations/Curve';
 import BarChart from './components/Visualizations/Bar';
+import DurationDistributionData from './components/Visualizations/DurationDistribution';
 
 function App() {
 
@@ -18,9 +19,11 @@ function App() {
         <FileUpload setUploadedDetails={setUploadedDetails}/>
         <CleanData uploadedDetails={uploadedDetails} setDataCleaningDetails={setDataCleaningDetails} dataCleaningDetails={dataCleaningDetails}/>
         {
-          // dataCleaningDetails?.status === dataCleaningStatus.SUCCESS && <>
+          // dataCleaningDetails?.status === dataCleaningStatus.SUCCESS && 
+          <>
+            <DurationDistributionData/>
             <BarChart uploadedDetails={uploadedDetails}/>
-          // </>
+          </>
         }
        
     </div>
