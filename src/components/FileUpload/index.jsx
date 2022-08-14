@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import './index.css';
 import { baseUrl, urls } from '../../utils/constants';
+import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 
 const { FILE_UPLOAD } = urls;
 
@@ -33,27 +35,31 @@ function FileUpload({setUploadedDetails}) {
       },
     };
     axios.post(url, formData, config).then((response) => {
-      console.log(response.data);
       setUploadedDetails(response.data);
     });
 
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-        <h1>File Upload</h1>
+    <form onSubmit={handleSubmit} className="file-upload-form">
+        <Typography sx={{marginBottom : '4vw', fontWeight:700}} variant="h4">Online Data Cleaning and Visualization Tool</Typography>
+        
+        <Typography sx={{mb:5}} variant="h4">Step 1: Get started by uploading files...</Typography>
         
         <label className="file-upload-label">
-            Rides Data File Upload
-            <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={(e)=>handleChange(e,'ridesDataFile')}/>
+            Click to upload Rides Data file
+            <input type="file"  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={(e)=>handleChange(e,'ridesDataFile')}/>
         </label>
 
         <label className="file-upload-label">
-            Station Data File Upload
+            Click to upload Station Data file
             <input type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={(e)=>handleChange(e,'stationDataFile')}/>
         </label>
         
-        {ridesDataFile && stationDataFile && <button type="submit">Upload</button>}
+        {
+          ridesDataFile && stationDataFile && 
+            <Button size="large" sx={{mt:4}} type="submit" variant='contained'>Upload</Button>
+        }
     </form>
   );
 }

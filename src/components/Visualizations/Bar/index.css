@@ -1,4 +1,4 @@
-svg {
+.bar-wrapper svg {
     background: none;
     overflow: visible;
     display: block;
@@ -6,17 +6,6 @@ svg {
     height: 275px;
   }
   
-  #root {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    height: 100vh;
-    padding: 0 50px;
-  }
-  
-  button {
-    width: 100px;
-    border: 1px solid black;
-    margin: 0 auto 5px;
-  }
+.bar-wrapper{
+  padding: 0 0 50vw 0; 
+}

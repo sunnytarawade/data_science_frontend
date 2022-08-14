@@ -1,3 +1,24 @@
 .file-upload-label{
     display: block;
+    cursor: pointer;
+    background-color: #eeeeee;
+    font-size: 20px;
+    margin-bottom: 20px;
+    transition: filter 0.2s;
+    border-radius: 3px;
+    
+}
+
+.file-upload-label:hover{
+    filter: drop-shadow(5px 5px 2px lightgrey);
+}
+
+.file-upload-form{
+    padding: 0 0 10vw 0; 
+
+}
+
+.file-upload-label > input{
+    margin : 2vw;
+    font-size: 16px;
 }

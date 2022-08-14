@@ -3,6 +3,8 @@ import { select, axisBottom, axisLeft, scaleLinear, scaleBand } from "d3";
 import ResizeObserver from "resize-observer-polyfill";
 import './index.css';
 import { baseUrl, urls } from "../../../utils/constants";
+import { Paper, Typography } from "@mui/material";
+import CustomSlider from "../../CustomSlider";
 const useResizeObserver = (ref) => {
   const [dimensions, setDimensions] = useState(null);
   useEffect(() => {
@@ -24,168 +26,37 @@ function BarChart({ uploadedDetails }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  const [popularStationsData, setPopularStationsData] = useState([
-    {
-    "access_count": 495,
-    "id": 154,
-    "latitude": 51.50379168,
-    "longitude": -0.11282408,
-    "name": "Waterloo Station 3, Waterloo"
-    },
-    {
-    "access_count": 481,
-    "id": 14,
-    "latitude": 51.52994371,
-    "longitude": -0.123616824,
-    "name": "Belgrove Street , King's Cross"
-    },
-    {
-    "access_count": 241,
-    "id": 374,
-    "latitude": 51.50402794,
-    "longitude": -0.11386436,
-    "name": "Waterloo Station 1, Waterloo"
-    },
-    {
-    "access_count": 207,
-    "id": 217,
-    "latitude": 51.51615461,
-    "longitude": -0.082422399,
-    "name": "Wormwood Street, Liverpool Street"
-    },
-    {
-    "access_count": 198,
-    "id": 101,
-    "latitude": 51.51155322,
-    "longitude": -0.0929401,
-    "name": "Queen Street 1, Bank"
-    },
-    {
-    "access_count": 192,
-    "id": 194,
-    "latitude": 51.50462759,
-    "longitude": -0.091773776,
-    "name": "Hop Exchange, The Borough"
-    },
-    {
-    "access_count": 182,
-    "id": 55,
-    "latitude": 51.51707521,
-    "longitude": -0.086685542,
-    "name": "Finsbury Circus, Liverpool Street"
-    },
-    {
-    "access_count": 176,
-    "id": 41,
-    "latitude": 51.520955,
-    "longitude": -0.083493552,
-    "name": "Pindar Street, Liverpool Street"
-    },
-    {
-    "access_count": 173,
-    "id": 66,
-    "latitude": 51.51795029,
-    "longitude": -0.108657431,
-    "name": "Holborn Circus, Holborn"
-    },
-    {
-    "access_count": 163,
-    "id": 427,
-    "latitude": 51.51397065,
-    "longitude": -0.09294031,
-    "name": "Cheapside, Bank"
-    },
-    {
-    "access_count": 162,
-    "id": 341,
-    "latitude": 51.50810309,
-    "longitude": -0.12602103,
-    "name": "Craven Street, Strand"
-    },
-    {
-    "access_count": 152,
-    "id": 361,
-    "latitude": 51.50391973,
-    "longitude": -0.11342629,
-    "name": "Waterloo Station 2, Waterloo"
-    },
-    {
-    "access_count": 151,
-    "id": 251,
-    "latitude": 51.518908,
-    "longitude": -0.079249,
-    "name": "Brushfield Street, Liverpool Street"
-    },
-    {
-    "access_count": 150,
-    "id": 104,
-    "latitude": 51.51159481,
-    "longitude": -0.077121322,
-    "name": "Crosswall, Tower"
-    },
-    {
-    "access_count": 145,
-    "id": 71,
-    "latitude": 51.5154186,
-    "longitude": -0.098850915,
-    "name": "Newgate Street , St. Paul's"
-    },
-    {
-    "access_count": 144,
-    "id": 199,
-    "latitude": 51.51048489,
-    "longitude": -0.082989638,
-    "name": "Great Tower Street, Monument"
-    },
-    {
-    "access_count": 143,
-    "id": 732,
-    "latitude": 51.50630441,
-    "longitude": -0.087262995,
-    "name": "Duke Street Hill, London Bridge"
-    },
-    {
-    "access_count": 142,
-    "id": 132,
-    "latitude": 51.52364804,
-    "longitude": -0.074754872,
-    "name": "Bethnal Green Road, Shoreditch"
-    },
-    {
-    "access_count": 133,
-    "id": 215,
-    "latitude": 51.51906932,
-    "longitude": -0.088285377,
-    "name": "Moorfields, Moorgate"
-    },
-    {
-    "access_count": 127,
-    "id": 191,
-    "latitude": 51.50311799,
-    "longitude": -0.153520935,
-    "name": "Hyde Park Corner, Hyde Park"
-    }
-    ]);
+  const [noOfStations,setNoOfStations] = useState(20);
+  const [popularStationsData,setPopularStationsData] = useState([])
 
-  const [extremeAccessCountValues,setExtremeAccessCountValues] = useState({max:495,min:0});
+  const [stationPopularityBoundaries,setStationPopularityBoundaries] = useState({max: 0 , min: 0 })
+  
+  useEffect(()=>{
+    popularStationsData.length && setStationPopularityBoundaries({max: popularStationsData[0]['access_count'] , min: popularStationsData[popularStationsData.length - 1]['access_count'] })
+  },[popularStationsData])
 
-  // useEffect(()=>{
-  //   if(uploadedDetails?.upload_id){
-  //     fetch(`${baseUrl}${urls.VISUALIZE_MOST_POPULAR_STATIONS}${uploadedDetails.upload_id}/`)
-	// 		.then(response => response.json())
-	// 		.then(response_data=>{
-  //       console.log(response_data);
-  //       setPopularStationsData(response_data)
-  //     })
+  
+  useEffect(()=>{
+    updatePopularStationsData();
+  },[noOfStations])
 
-  //   }
-  // },[uploadedDetails])
+
+  const updatePopularStationsData = ()=>{
+    const url = `${baseUrl}${urls.VISUALIZE_MOST_POPULAR_STATIONS}${uploadedDetails?.upload_id}/${noOfStations}/`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(response_data=>{
+            setPopularStationsData(response_data);
+        })
+
+  }
+
 
   // will be called initially and on every data change
   useEffect(() => {
     const svg = select(svgRef.current);
-    console.log(dimensions);
-
+    
     if (!dimensions) return;
 
     // scales
@@ -195,11 +66,11 @@ function BarChart({ uploadedDetails }) {
       .padding(0.5);
 
     const yScale = scaleLinear()
-      .domain([0, 1.05 * extremeAccessCountValues.max ]) // todo
+      .domain([0, 1.05 * stationPopularityBoundaries.max ]) // todo
       .range([dimensions.height, 0]); // change
 
     const colorScale = scaleLinear()
-      .domain([extremeAccessCountValues.min , extremeAccessCountValues.max])
+      .domain([stationPopularityBoundaries.min , stationPopularityBoundaries.max])
       .range(["orange", "red"])
       .clamp(true);
 
@@ -219,7 +90,7 @@ function BarChart({ uploadedDetails }) {
       
     svg
       .selectAll('.x-axis .tick')
-      .style("transform",(value,index)=>`rotate(270deg)translateX(-100px)translateY(${xScale(index)}px)`)
+      .style("transform",(value,index)=>`rotate(270deg)translateX(-14vw)translateY(${xScale(index)}px)`)
     
     svg
       .selectAll('.x-axis line')
@@ -259,7 +130,13 @@ function BarChart({ uploadedDetails }) {
   }, [popularStationsData, dimensions]);
 
   return (
-    <div ref={wrapperRef} style={{ marginBottom: "2rem" }}>
+    <div ref={wrapperRef} className="bar-wrapper">
+      <Typography variant="h5" sx={{fontWeight:700}}>Top {noOfStations} Most Popular Stations Bar Chart</Typography>
+      <CustomSlider sliderLabel="Number of most popular stations" handleSliderValueChange={setNoOfStations}/>
+      <Paper elevation="4" sx={{p:2,m:3}}>
+        <Typography>X - Axis : Station Names</Typography>
+        <Typography>Y - Axis : Number of times the ride started or ended at the particular station</Typography>
+      </Paper>
       <svg ref={svgRef}>
         <g className="x-axis" />
         <g className="y-axis" />

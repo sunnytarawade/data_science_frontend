@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useState } from "react";
-import { select, axisBottom, axisLeft, scaleLinear, scaleBand, curveCardinal, line } from "d3";
+import { select, axisBottom, axisLeft, scaleLinear,line } from "d3";
 import ResizeObserver from "resize-observer-polyfill";
 import './index.css';
 import { baseUrl, urls } from "../../../utils/constants";
+import { Paper, Typography } from "@mui/material";
+import CustomSlider from "../../CustomSlider";
 const useResizeObserver = (ref) => {
   const [dimensions, setDimensions] = useState(null);
   useEffect(() => {
@@ -24,172 +26,28 @@ function DurationDistributionData({ uploadedDetails }) {
   const svgRef = useRef();
   const wrapperRef = useRef();
   const dimensions = useResizeObserver(wrapperRef);
-  const [durationDistributionData, setDurationDistributionData] = useState([
-    {
-    "left": 22.944,
-    "right": 59.2,
-    "value": 1
-    },
-    {
-    "left": 59.2,
-    "right": 94.4,
-    "value": 35
-    },
-    {
-    "left": 94.4,
-    "right": 129.6,
-    "value": 210
-    },
-    {
-    "left": 129.6,
-    "right": 164.8,
-    "value": 0
-    },
-    {
-    "left": 164.8,
-    "right": 200,
-    "value": 477
-    },
-    {
-    "left": 200,
-    "right": 235.2,
-    "value": 0
-    },
-    {
-    "left": 235.2,
-    "right": 270.4,
-    "value": 708
-    },
-    {
-    "left": 270.4,
-    "right": 305.6,
-    "value": 849
-    },
-    {
-    "left": 305.6,
-    "right": 340.8,
-    "value": 0
-    },
-    {
-    "left": 340.8,
-    "right": 376,
-    "value": 909
-    },
-    {
-    "left": 376,
-    "right": 411.2,
-    "value": 0
-    },
-    {
-    "left": 411.2,
-    "right": 446.4,
-    "value": 948
-    },
-    {
-    "left": 446.4,
-    "right": 481.6,
-    "value": 944
-    },
-    {
-    "left": 481.6,
-    "right": 516.8,
-    "value": 0
-    },
-    {
-    "left": 516.8,
-    "right": 552,
-    "value": 898
-    },
-    {
-    "left": 552,
-    "right": 587.2,
-    "value": 0
-    },
-    {
-    "left": 587.2,
-    "right": 622.4,
-    "value": 911
-    },
-    {
-    "left": 622.4,
-    "right": 657.6,
-    "value": 0
-    },
-    {
-    "left": 657.6,
-    "right": 692.8,
-    "value": 814
-    },
-    {
-    "left": 692.8,
-    "right": 728,
-    "value": 766
-    },
-    {
-    "left": 728,
-    "right": 763.2,
-    "value": 0
-    },
-    {
-    "left": 763.2,
-    "right": 798.4,
-    "value": 690
-    },
-    {
-    "left": 798.4,
-    "right": 833.6,
-    "value": 0
-    },
-    {
-    "left": 833.6,
-    "right": 868.8,
-    "value": 675
-    },
-    {
-    "left": 868.8,
-    "right": 904,
-    "value": 623
-    },
-    {
-    "left": 904,
-    "right": 939.2,
-    "value": 0
-    },
-    {
-    "left": 939.2,
-    "right": 974.4,
-    "value": 592
-    },
-    {
-    "left": 974.4,
-    "right": 1009.6,
-    "value": 0
-    },
-    {
-    "left": 1009.6,
-    "right": 1044.8,
-    "value": 532
-    },
-    {
-    "left": 1044.8,
-    "right": 1080,
-    "value": 4148
-    }
-    ]);
+  const [durationDistributionData, setDurationDistributionData] = useState([]);
+  const [totalDurationIntervals,setTotalDurationIntervals] = useState(20);
+  const [durationDistributionDataBoundaryValues,setDurationDistributionDataBoundaryValues] = useState({max:0,min:0});
+  const updateDurationDistributionData = ()=>{
+    const url = `${baseUrl}${urls.VISUALIZE_DURATION_DISTRIBUTION}${uploadedDetails?.upload_id}/${totalDurationIntervals}/`;
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(response_data=>{
+          setDurationDistributionData(response_data);
+          setDurationDistributionDataBoundaryValues({
+            max: Math.max(...response_data.map(({value})=>value)),
+            min: Math.min(...response_data.map(({value})=>value)),
+          })
+        })
 
-  const [extremeAccessCountValues,setExtremeAccessCountValues] = useState({max:1080,min:20});
+  }
 
-  // useEffect(()=>{
-  //   if(uploadedDetails?.upload_id){
-  //     fetch(`${baseUrl}${urls.VISUALIZE_MOST_POPULAR_STATIONS}${uploadedDetails.upload_id}/`)
-	// 		.then(response => response.json())
-	// 		.then(response_data=>{
-  //       console.log(response_data);
-  //       setDurationDistributionData(response_data)
-  //     })
-
-  //   }
-  // },[uploadedDetails])
+  useEffect(()=>{
+    if(totalDurationIntervals > 3)
+      updateDurationDistributionData();
+  },[totalDurationIntervals])
 
   // will be called initially and on every data change
   useEffect(() => {
@@ -205,12 +63,13 @@ function DurationDistributionData({ uploadedDetails }) {
     //   .padding(0.5);
 
     const yScale = scaleLinear()
-      .domain([0, 4200])
+      .domain([0, 1.05* durationDistributionDataBoundaryValues.max])
       .range([dimensions.height, 0]); // change
 
     const xAxis = axisBottom(xScale)
       .ticks(durationDistributionData.length)
-      .tickFormat(index => `(${durationDistributionData[index].left} - ${durationDistributionData[index].right}]` );
+      .tickFormat(index => `(${parseFloat(durationDistributionData[index].left).toFixed(2)} - ${parseFloat(durationDistributionData[index].right).toFixed(2)}]` )
+      
     svg
       .select(".x-axis")
       .style("transform", `translateY(${dimensions.height}px)`)
@@ -247,18 +106,48 @@ function DurationDistributionData({ uploadedDetails }) {
       .attr("fill", "none")
       .attr("stroke", "blue");
     
-    //   svg
-    //   .selectAll(".points circle")
-    //   .data(durationDistributionData)
-    //   .join(entry => entry.append("circle"),update=>update,exit => exit.remove())
-    //   .attr("r", 3)
-    //   .attr("cx", (value,index)=>xScale(index))
-    //   .attr("cy", value => yScale(value.value))
-    //   .attr("stroke", "blue");
+      svg
+      .selectAll("circle")
+      .attr("class", "point")
+      .data(durationDistributionData)
+      .join("circle")
+      .attr("r", 3)
+      .attr("cx", (value,index)=>{
+        return xScale(index)
+      })
+      .attr("cy", value => yScale(value.value))
+      .attr("stroke", "blue")
+      .on("mouseenter", function (event, value) {
+        // events have changed in d3 v6:
+        // https://observablehq.com/@d3/d3v6-migration-guide#events
+        const index = svg.selectAll(".point").nodes().indexOf(this);
+        console.log(index,xScale(index))
+        svg
+          .selectAll(".tooltip")
+          .data([value])
+          .join((enter) => enter.append("text").attr("y", yScale(value.value) - 4))
+          .attr("class", "tooltip")
+          .text(value.value)
+          .attr("x", xScale(index))
+          .attr("text-anchor", "middle")
+          .transition()
+          .attr("y", yScale(value.value) - 16)
+          .attr("opacity", 1);
+      })
+      .on("mouseleave", () => svg.select(".tooltip").remove())
+    
   }, [durationDistributionData,dimensions]);
 
+  
+
   return (
-    <div ref={wrapperRef} style={{ marginBottom: "2rem" }}>
+    <div ref={wrapperRef} className="duration-distribution-wrapper">
+      <Typography variant="h5" sx={{fontWeight:700}}>Duration Distribution With Respect to Duration Intervals</Typography>
+      <CustomSlider sliderLabel="Distibution of ride duration" handleSliderValueChange={setTotalDurationIntervals}/>
+      <Paper elevation="4" sx={{p:2,m:3}}>
+        <Typography>X - Axis : Duration Intervals (in seconds)</Typography>
+        <Typography>Y - Axis : Duration Occurence Count (in seconds)</Typography>
+      </Paper>
       <svg ref={svgRef}>
         <g className="points"/>
         <g className="x-axis" />

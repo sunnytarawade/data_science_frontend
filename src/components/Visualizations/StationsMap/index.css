@@ -5,3 +5,7 @@
 .marker-popup-heading{
     font-size: 1.2vw;
 }
+
+.map-wrapper{
+    padding: 0 0 15vh 0;
+}
