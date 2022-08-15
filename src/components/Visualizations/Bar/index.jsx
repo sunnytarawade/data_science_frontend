@@ -133,7 +133,7 @@ function BarChart({ uploadedDetails }) {
     <div ref={wrapperRef} className="bar-wrapper">
       <Typography variant="h5" sx={{fontWeight:700}}>Top {noOfStations} Most Popular Stations Bar Chart</Typography>
       <CustomSlider sliderLabel="Number of most popular stations" handleSliderValueChange={setNoOfStations}/>
-      <Paper elevation="4" sx={{p:2,m:3}}>
+      <Paper elevation={4} sx={{p:2,m:3}}>
         <Typography>X - Axis : Station Names</Typography>
         <Typography>Y - Axis : Number of times the ride started or ended at the particular station</Typography>
       </Paper>

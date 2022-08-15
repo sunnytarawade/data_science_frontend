@@ -144,7 +144,7 @@ function DurationDistributionData({ uploadedDetails }) {
     <div ref={wrapperRef} className="duration-distribution-wrapper">
       <Typography variant="h5" sx={{fontWeight:700}}>Duration Distribution With Respect to Duration Intervals</Typography>
       <CustomSlider sliderLabel="Distibution of ride duration" handleSliderValueChange={setTotalDurationIntervals}/>
-      <Paper elevation="4" sx={{p:2,m:3}}>
+      <Paper elevation={4} sx={{p:2,m:3}}>
         <Typography>X - Axis : Duration Intervals (in seconds)</Typography>
         <Typography>Y - Axis : Duration Occurence Count (in seconds)</Typography>
       </Paper>

@@ -12,5 +12,6 @@ export const urls = {
     CLEAN_DATA : 'clean/',
     DOWNLOAD_CLEANED_DATA : 'clean/download/',
     VISUALIZE_MOST_POPULAR_STATIONS : 'visualize/popular_stations/',
-    VISUALIZE_DURATION_DISTRIBUTION : 'visualize/duration_distribution/'
+    VISUALIZE_DURATION_DISTRIBUTION : 'visualize/duration_distribution/',
+    DATA_OVERVIEW_DETAILS : 'clean/data_cleaning_details/',
 }

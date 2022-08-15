@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import {dataCleaningStatus,baseUrl,urls} from '../../utils/constants';
 import { Button, CircularProgress, Container, Typography } from '@mui/material';
+import DataOverview from './DataOverview';
 
 const {CLEAN_DATA,DOWNLOAD_CLEANED_DATA} = urls;
 
@@ -53,9 +54,13 @@ function CleanData({uploadedDetails,dataCleaningDetails,setDataCleaningDetails})
             </Typography>
             {
                 dataCleaningDetails?.status === dataCleaningStatus.SUCCESS ? 
-                     <Button size="large" onClick={handleDownloadCleanedData} variant="outlined">Download Cleaned Data</Button>
-                :   (showSpinner ? <CircularProgress/> : <Button size="large" onClick={handleStartDataCleaning} variant="contained" sx={{mr: 3}}>Clean Data</Button>)
-            
+                    <>
+                        <Button size="large" onClick={handleDownloadCleanedData} variant="outlined" sx={{mb:4}}>Download Cleaned Data</Button>
+                        <DataOverview uploadedDetails={uploadedDetails}/>
+                    </>
+                :   (showSpinner ? <CircularProgress/> : 
+                    <Button size="large" onClick={handleStartDataCleaning} variant="contained" sx={{mr: 3}}>Clean Data</Button>
+                )
             }
         </Container>
     ) : null;
