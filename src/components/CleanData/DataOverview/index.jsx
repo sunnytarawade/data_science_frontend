@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { baseUrl, urls } from '../../../utils/constants';
 import './index.css';
@@ -56,8 +56,8 @@ function DataOverview({uploadedDetails}) {
                     Column wise count of empty values
                     <ul>
                         {
-                            Object.keys(dataOverviewDetails.rides_data_empty_records_before_cleaning || {}).map(key => {
-                                return <li><Typography vartiant="p">{key} : <span className="data-overview-value">{dataOverviewDetails.rides_data_empty_records_before_cleaning[key]}</span></Typography></li>
+                            Object.keys(dataOverviewDetails.rides_data_empty_records_before_cleaning || {}).map((key,index) => {
+                                return <li key={`rides-data-key-${index}`}><Typography vartiant="p">{key} : <span className="data-overview-value">{dataOverviewDetails.rides_data_empty_records_before_cleaning[key]}</span></Typography></li>
                             })
                         }
                     </ul>
@@ -71,8 +71,8 @@ function DataOverview({uploadedDetails}) {
                     Column wise count of empty values
                     <ul>
                         {
-                            Object.keys(dataOverviewDetails.station_data_empty_values || {}).map(key => {
-                                return <li><Typography vartiant="p">{key} : <span className="data-overview-value">{dataOverviewDetails.station_data_empty_values[key]}</span></Typography></li>
+                            Object.keys(dataOverviewDetails.station_data_empty_values || {}).map((key,index) => {
+                                return <li key={`station-data-key-${index}`}><Typography vartiant="p">{key} : <span className="data-overview-value">{dataOverviewDetails.station_data_empty_values[key]}</span></Typography></li>
                             })
                         }
                     </ul>
@@ -80,7 +80,7 @@ function DataOverview({uploadedDetails}) {
             </li>
 
             <li>
-                Columns dropped : <span className="data-overview-value">{dataOverviewDetails.station_data_columns_before_cleaning.filter(value => !dataOverviewDetails.station_data_columns_after_cleaning.includes(value)).join(", ")}</span>
+                Columns dropped : <span className="data-overview-value">{dataOverviewDetails?.station_data_columns_before_cleaning?.filter(value => !dataOverviewDetails.station_data_columns_after_cleaning.includes(value))?.join(", ")}</span>
             </li>
         </ul>
     </Container>

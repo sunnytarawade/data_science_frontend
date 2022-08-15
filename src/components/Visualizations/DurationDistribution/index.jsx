@@ -121,7 +121,7 @@ function DurationDistributionData({ uploadedDetails }) {
         // events have changed in d3 v6:
         // https://observablehq.com/@d3/d3v6-migration-guide#events
         const index = svg.selectAll(".point").nodes().indexOf(this);
-        console.log(index,xScale(index))
+        
         svg
           .selectAll(".tooltip")
           .data([value])
